@@ -3,7 +3,7 @@ import { Button } from "./Button";
 import { api } from '../services/api';
 import '../styles/sidebar.scss';
 
-import {useSelectedId} from '../hooks/useSelectedId';
+//import {useSelectedId} from '../hooks/useSelectedId';
 
 interface GenreResponseProps {
   id: number;
@@ -11,20 +11,15 @@ interface GenreResponseProps {
   title: string;
 }
 
-interface MovieProps {
-  imdbID: string;
-  Title: string;
-  Poster: string;
-  Ratings: Array<{
-    Source: string;
-    Value: string;
-  }>;
-  Runtime: string;
+interface SideBarProps {
+  setGenresId : (id:number) => void;
+  selectedID : number;
 }
 
-export function SideBar() {
+export function SideBar({setGenresId , selectedID } : SideBarProps) {
   const [genres, setGenres] = useState<GenreResponseProps[]>([]);
-  const { selectedID, selectedGenre2} = useSelectedId();
+  //const { selectedID, selectedGenre2} = useSelectedId();
+  //vou bloquear pq quero tentar de outro jeito
 
   useEffect(() => {
     api.get<GenreResponseProps[]>('genres').then(response => {
@@ -33,7 +28,7 @@ export function SideBar() {
   }, []);
 
   function handleClickButton(id: number) {
-    selectedGenre2(id);
+    setGenresId(id);
   }
 
   return (

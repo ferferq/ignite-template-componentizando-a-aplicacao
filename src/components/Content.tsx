@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelectedId } from "../hooks/useSelectedId";
+//import { useSelectedId } from "../hooks/useSelectedId";
 import { api } from "../services/api";
 import { MovieCard } from "./MovieCard";
 import '../styles/content.scss';
@@ -21,8 +21,12 @@ interface GenreResponseProps {
   title: string;
 }
 
-export function Content() {
-  const { selectedID } = useSelectedId();
+interface ContentProps {
+  selectedID: number;
+}
+
+export function Content({ selectedID } : ContentProps) {
+  //const { selectedID } = useSelectedId();
   const [movies, setMovies] = useState<MovieProps[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<GenreResponseProps>({} as GenreResponseProps);
 
