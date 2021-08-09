@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useCallback, useState } from "react";
 
 type SelectedGenreConfigContext = {
   selectedID: number;
@@ -14,9 +14,9 @@ export const SelectedGenre = createContext({} as SelectedGenreConfigContext);
 export function SelectedGenreId (props: SelectedGenreIdProviderProps) {
   const [selectedGenreId, setSelectedGenreId] = useState(1);
 
-  function selectedGenre2 (id: number) {
-    setSelectedGenreId(id);
-  }
+  const selectedGenre2 = useCallback((data : number) => {
+    setSelectedGenreId(data);
+  }, []);
 
   return (
     <SelectedGenre.Provider value={{selectedID:selectedGenreId, selectedGenre2}}>

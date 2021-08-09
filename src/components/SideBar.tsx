@@ -2,23 +2,18 @@ import { useEffect, useState } from "react";
 import { Button } from "./Button";
 import { api } from '../services/api';
 import '../styles/sidebar.scss';
+import { List, ListRowRenderer, WindowScroller } from 'react-virtualized';
 
-//import {useSelectedId} from '../hooks/useSelectedId';
+import {useSelectedId} from '../hooks/useSelectedId';
 
 interface GenreResponseProps {
   id: number;
   name: 'action' | 'comedy' | 'documentary' | 'drama' | 'horror' | 'family';
   title: string;
 }
-
-interface SideBarProps {
-  setGenresId : (id:number) => void;
-  selectedID : number;
-}
-
-export function SideBar({setGenresId , selectedID } : SideBarProps) {
+export function SideBar() {
   const [genres, setGenres] = useState<GenreResponseProps[]>([]);
-  //const { selectedID, selectedGenre2} = useSelectedId();
+  const { selectedID, selectedGenre2} = useSelectedId();
   //vou bloquear pq quero tentar de outro jeito
 
   useEffect(() => {
@@ -28,15 +23,51 @@ export function SideBar({setGenresId , selectedID } : SideBarProps) {
   }, []);
 
   function handleClickButton(id: number) {
-    setGenresId(id);
+    selectedGenre2(id);
+  }
+
+  const rowRenderer: ListRowRenderer = ({ index, key, style }) => {
+    return <div key={key} style={style}>
+      <Button
+        key={String(genres[index].id)}
+        title={genres[index].title}
+        iconName={genres[index].name}
+        onClick={() => handleClickButton(genres[index].id)}
+        selected={selectedID === genres[index].id}
+      />
+    </div>
   }
 
   return (
-    <nav className="sidebar">
-    <span>Watch<p>Me</p></span>
+    //<WindowScroller>
+     // {({height, isScrolling, registerChild, onChildScroll, scrollTop}) => (
+      <nav className="sidebar">
+        <span>Watch<p>Me</p></span>
+        <div className="buttons-container">
+          <List
+            height={500}
+          //  isScrolling={isScrolling}
+          //  onScroll={onChildScroll}
+            rowHeight={80} 
+            width={400}
+            overscanRowCount={3}
+            rowCount={genres.length}
+            rowRenderer={rowRenderer}  
+          //  scrollTop={scrollTop}
+          />
+        </div>
+      </nav>
+    //  )}
+   // </WindowScroller>
+  );
+}
 
-    <div className="buttons-container">
-      {genres.map(genre => (
+
+
+
+
+
+{/* {genres.map(genre => (
         <Button
           key={String(genre.id)}
           title={genre.title}
@@ -44,9 +75,4 @@ export function SideBar({setGenresId , selectedID } : SideBarProps) {
           onClick={() => handleClickButton(genre.id)}
           selected={selectedID === genre.id}
         />
-      ))}
-    </div>
-
-  </nav>
-  );
-}
+      ))} */}
